@@ -12,7 +12,7 @@ class Employee {
 		return this.name;
 	}
 	// define the getID function
-	getID() {
+	getId() {
 		return this.id;
 	}
 	// define the getEmail function
