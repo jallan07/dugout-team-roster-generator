@@ -18,6 +18,8 @@ function getManager() {
 		"-".repeat(60),
 		"Please answer the following questions to build your team.",
 		"First, let's get information about the manager.",
+		"-".repeat(60),
+		"\r",
 	].join("\n\n");
 	console.log(intro + "\n");
 	inquirer
@@ -80,7 +82,18 @@ function getManager() {
 				responses.managerOffice
 			);
 			teamMembers.push(manager);
-			console.log(teamMembers);
+
+			// script for the next part
+			const managerCollected = [
+				"\r",
+				"-".repeat(60),
+				`Awesome. ${manager.name} has been added to the team!`,
+				"Next up, we need to get some information about your other team members.",
+				"-".repeat(60),
+				"\r",
+			].join("\n\n");
+
+			console.log(managerCollected);
 			addMembers();
 		});
 }
