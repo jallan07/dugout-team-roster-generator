@@ -227,7 +227,94 @@ function getManager() {
 	}
 
 	// function that creates more interns
-	function addIntern() {}
+	function addIntern() {
+		// set the dialogue for the addEngineer flow
+		const internDialogue = [
+			"\r",
+			"-".repeat(60),
+			`Sweet, let's add some internss!`,
+			"Just a few questions to get their information added...",
+			"-".repeat(60),
+		].join("\n\n");
+		// display the dialogue for the engineer flow
+		console.log(internDialogue);
+		// prompt user for inputs
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					message: "What's the name of the Intern Developer?",
+					name: "internName",
+					validate: (input) => {
+						// accept only if the user inputs info
+						// if the input passes the validation, then return true
+						if (input !== "") {
+							return true;
+						} else {
+							// otherwise, display the following message
+							return "Please enter a name for your intern.";
+						}
+					},
+				},
+				{
+					type: "input",
+					name: "internId",
+					message: "What's their ID number?",
+					validate: (input) => {
+						// accept only numbers
+						const passed = input.match(/^[1-9]\d*$/);
+						// if the input passes the validation, then return true
+						if (passed) {
+							return true;
+						}
+						// otherwise, display the following message
+						return "Please enter a positive number greater than zero.";
+					},
+				},
+				{
+					type: "input",
+					name: "internEmail",
+					message: "What's their email address?",
+					validate: (input) => {
+						// accept only the correct format of an email address
+						const passed = input.match(/\S+@\S+\.\S+/);
+						// if the input passes the validation, then return true
+						if (passed) {
+							return true;
+						}
+						// otherwise, display the following message
+						return "Please enter a valid email address.";
+					},
+				},
+				{
+					type: "input",
+					name: "internSchool",
+					message: "What's school do they attend?",
+					validate: (input) => {
+						// accept only if the user inputs info
+						// if the input passes the validation, then return true
+						if (input !== "") {
+							return true;
+						} else {
+							// otherwise, display the following message
+							return "Please enter a valid school name.";
+						}
+					},
+				},
+			])
+			.then((responses) => {
+				// save the responses as a new intern
+				const intern = new Intern(
+					responses.internName,
+					responses.internId,
+					responses.internEmail,
+					responses.internSchool
+				);
+				// Push the newly entered intern to the teamMembers object array
+				teamMembers.push(intern);
+				addMembers();
+			});
+	}
 }
 
 // store the team members in an array of objects after they have been created
