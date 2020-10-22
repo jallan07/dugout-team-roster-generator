@@ -13,7 +13,7 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // Function that gets the information of the manager of the team
-function getManager() {
+function buildRoster() {
 	// introduction dialogue
 	const intro = [
 		"\r",
@@ -25,107 +25,33 @@ function getManager() {
 		"First, let's get information about the manager...",
 		"-".repeat(60),
 	].join("\n\n");
+	// print the intro dialogue to the screen
 	console.log(intro + "\n");
-	inquirer
-		.prompt([
-			{
-				type: "input",
-				message: "What is the manager's name?",
-				name: "managerName",
-				validate: (input) => {
-					// accepts only if the user has input something
-					// if the input passes validation, then return true
-					if (input !== "") {
-						return true;
-					}
-					// otherwise, display the following message
-					else {
-						return "Please enter a name for your manager.";
-					}
-				},
-			},
-			{
-				type: "input",
-				name: "managerId",
-				message: "What is the manager's ID number?",
-				validate: (input) => {
-					// accept only numbers
-					const passed = input.match(/^[1-9]\d*$/);
-					// if the input passes the validation, then return true
-					if (passed) {
-						return true;
-					}
-					// otherwise, display the following message
-					return "Please enter a positive number greater than zero.";
-				},
-			},
-			{
-				type: "input",
-				name: "managerEmail",
-				message: "What is the manager's email address?",
-				validate: (input) => {
-					// accept only the normal email format
-					const passed = input.match(/\S+@\S+\.\S+/);
-					// if the input passes the validation, then return true
-					if (passed) {
-						return true;
-					}
-					// otherwise, display the following message
-					return "Please enter a valid email address.";
-				},
-			},
-			{
-				type: "input",
-				name: "managerOffice",
-				message: "What is the manager's office number?",
-				validate: (input) => {
-					// accept only numbers
-					const passed = input.match(/^[1-9]\d*$/);
-					// if the input passes the validation, then return true
-					if (passed) {
-						return true;
-					}
-					// otherwise, display the following message
-					return "Please enter numbers only.";
-				},
-			},
-		])
-		// and to create objects for each team member (using the correct classes as blueprints!)
-		.then((responses) => {
-			const manager = new Manager(
-				responses.managerName,
-				responses.managerId,
-				responses.managerEmail,
-				responses.managerOffice
-			);
-			coworkers.push(manager);
-
-			// dialogue for the next part
-			const managerCollected = [
-				"\r",
-				"-".repeat(60),
-				`Awesome. ${manager.name} has been added to the team!`,
-				"Next up, we need to get some information about your other team members.",
-				"-".repeat(60),
-			].join("\n\n");
-			console.log(managerCollected);
-			addMembers();
-		});
+	// run the addCoworker function
+	addCoworker();
 
 	// function that asks to create more seats for additional team members (engineers and interns)
-	function addMembers() {
+	function addCoworker() {
 		inquirer
 			.prompt([
 				{
 					type: "list",
 					message: "Which type of employee would you like to add next?",
-					choices: ["Engineer", "Intern", "I'm done adding team members"],
+					choices: [
+						"Manager",
+						"Engineer",
+						"Intern",
+						"I'm done adding team members",
+					],
 					name: "position",
 				},
 			])
 			.then((response) => {
-				// if the user selects Engineer, then we want to call the addEngineer function
-				if (response.position === "Engineer") {
+				// if the user selects Manager, then we want to call the addManager function
+				if (response.position === "Manager") {
+					addManager();
+					// OR, if the user selects Engineer, then we want to call the addEngineer function
+				} else if (response.position === "Engineer") {
 					addEngineer();
 					// OR, if the user selects Intern, then we want to call the addIntern function
 				} else if (response.position === "Intern") {
@@ -133,11 +59,111 @@ function getManager() {
 				} else {
 					console.log("Team created:");
 					console.log(coworkers);
-					writeHtml();
 				}
 			});
 	}
+	// function that adds managers
+	function addManager() {
+		// set the dialogue for the addManager flow
+		const managerDialogue = [
+			"\r",
+			"-".repeat(60),
+			`Cool, let's add some managers!`,
+			"Just a few questions to get their information added...",
+			"-".repeat(60),
+		].join("\n\n");
+		// display the dialogue for the manager flow
+		console.log(managerDialogue);
+		// prompt user for inputs
+		inquirer
+			.prompt([
+				{
+					type: "input",
+					message: "What's the name of the Team Manager?",
+					name: "managerName",
+					validate: (input) => {
+						// accept only if the user inputs info
+						// if the input passes the validation, then return true
+						if (input !== "") {
+							return true;
+						} else {
+							// otherwise, display the following message
+							return "Please enter a name for your manager.";
+						}
+					},
+				},
+				{
+					type: "input",
+					name: "managerId",
+					message: "What's their ID number?",
+					validate: (input) => {
+						// accept only numbers
+						const passed = input.match(/^[1-9]\d*$/);
+						// if the input passes the validation, then return true
+						if (passed) {
+							return true;
+						}
+						// otherwise, display the following message
+						return "Please enter a positive number greater than zero.";
+					},
+				},
+				{
+					type: "input",
+					name: "managerEmail",
+					message: "What's their email address?",
+					validate: (input) => {
+						// accept only the correct format of an email address
+						const passed = input.match(/\S+@\S+\.\S+/);
+						// if the input passes the validation, then return true
+						if (passed) {
+							return true;
+						}
+						// otherwise, display the following message
+						return "Please enter a valid email address.";
+					},
+				},
+				{
+					type: "input",
+					name: "managerOffice",
+					message: "What's their office number?",
+					validate: (input) => {
+						// accept numbers only
+						const passed = input.match(/[1-9]/gi);
+						// if the input passes the validation, then return true
+						if (passed) {
+							return true;
+						}
+						// otherwise, display the following message
+						return "Please enter numbers only.";
+					},
+				},
+			])
+			.then((responses) => {
+				// save the responses as a new manager
+				const manager = new Manager(
+					responses.managerName,
+					responses.managerId,
+					responses.managerEmail,
+					responses.managerOffice
+				);
 
+				// dialogue for the next part
+				const managerCollected = [
+					"\r",
+					"-".repeat(60),
+					`Awesome. ${manager.name} has been added to the team!`,
+					"-".repeat(60),
+				].join("\n\n");
+				// print the dialogue to the screen
+				console.log(managerCollected);
+
+				// Push the newly entered manager to the coworkers object array
+				coworkers.push(manager);
+
+				// run the addCoworker function again
+				addCoworker();
+			});
+	}
 	// function that creates more engineers
 	function addEngineer() {
 		// set the dialogue for the addEngineer flow
@@ -224,10 +250,9 @@ function getManager() {
 				);
 				// Push the newly entered engineer to the coworkers object array
 				coworkers.push(engineer);
-				addMembers();
+				addCoworker();
 			});
 	}
-
 	// function that creates more interns
 	function addIntern() {
 		// set the dialogue for the addEngineer flow
@@ -314,33 +339,22 @@ function getManager() {
 				);
 				// Push the newly entered intern to the coworkers object array
 				coworkers.push(intern);
-				addMembers();
+				addCoworker();
 			});
 	}
-
 	// After the user has input all employees desired, call the `render` function (required
 	// above) and pass in an array containing all employee objects; the `render` function will
 	// generate and return a block of HTML including templated divs for each employee!
-	render(coworkers);
+	const html = render(coworkers);
+	// After you have your html, you're now ready to create an HTML file using the HTML
+	// returned from the `render` function. Now write it to a file named `team.html` in the
+	// `output` folder. You can use the variable `outputPath` above target this location.
+	// Hint: you may need to check if the `output` folder exists and create it if it
+	// does not.
+	fs.writeFile("./output/team.html", html, "utf-8", function (err) {
+		if (err) throw err;
+	});
 }
 
-// store the team members in an array of objects after they have been created
-const coworkers = [];
 // initialize the getManager function
-getManager();
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+buildRoster();
