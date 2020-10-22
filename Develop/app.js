@@ -98,7 +98,7 @@ function getManager() {
 				responses.managerEmail,
 				responses.managerOffice
 			);
-			teamMembers.push(manager);
+			coworkers.push(manager);
 
 			// dialogue for the next part
 			const managerCollected = [
@@ -131,7 +131,9 @@ function getManager() {
 				} else if (response.position === "Intern") {
 					addIntern();
 				} else {
-					return;
+					console.log("Team created:");
+					console.log(coworkers);
+					writeHtml();
 				}
 			});
 	}
@@ -220,8 +222,8 @@ function getManager() {
 					responses.engineerEmail,
 					responses.engineerGithub
 				);
-				// Push the newly entered engineer to the teamMembers object array
-				teamMembers.push(engineer);
+				// Push the newly entered engineer to the coworkers object array
+				coworkers.push(engineer);
 				addMembers();
 			});
 	}
@@ -310,21 +312,22 @@ function getManager() {
 					responses.internEmail,
 					responses.internSchool
 				);
-				// Push the newly entered intern to the teamMembers object array
-				teamMembers.push(intern);
+				// Push the newly entered intern to the coworkers object array
+				coworkers.push(intern);
 				addMembers();
 			});
 	}
+
+	// After the user has input all employees desired, call the `render` function (required
+	// above) and pass in an array containing all employee objects; the `render` function will
+	// generate and return a block of HTML including templated divs for each employee!
+	render(coworkers);
 }
 
 // store the team members in an array of objects after they have been created
-const teamMembers = [];
+const coworkers = [];
 // initialize the getManager function
 getManager();
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
