@@ -11,6 +11,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const coworkers = [];
+
 // Write code to use inquirer to gather information about the development team members,
 // Function that gets the information of the manager of the team
 function buildRoster() {
@@ -19,7 +21,8 @@ function buildRoster() {
 		"\r",
 		"-".repeat(60),
 		"W E L C O M E   T O   T H E   D U G O U T",
-		"With D U G O U T, you can easily create team rosters and organizational charts...all from right here in the command line.",
+		"With D U G O U T, you can easily create team rosters and organizational charts...",
+		"All from right here in the command line.",
 		"-".repeat(60),
 		"Please answer the following questions to build your team.",
 		"First, let's get information about the manager...",
@@ -57,8 +60,11 @@ function buildRoster() {
 				} else if (response.position === "Intern") {
 					addIntern();
 				} else {
-					console.log("Team created:");
-					console.log(coworkers);
+					createPage();
+					console.log(
+						"Team created! You can view the html file on your local device at " +
+							outputPath
+					);
 				}
 			});
 	}
@@ -342,18 +348,16 @@ function buildRoster() {
 				addCoworker();
 			});
 	}
-	// After the user has input all employees desired, call the `render` function (required
-	// above) and pass in an array containing all employee objects; the `render` function will
-	// generate and return a block of HTML including templated divs for each employee!
-	const html = render(coworkers);
-	// After you have your html, you're now ready to create an HTML file using the HTML
-	// returned from the `render` function. Now write it to a file named `team.html` in the
-	// `output` folder. You can use the variable `outputPath` above target this location.
-	// Hint: you may need to check if the `output` folder exists and create it if it
-	// does not.
-	fs.writeFile("./output/team.html", html, "utf-8", function (err) {
-		if (err) throw err;
-	});
+	// function that creates the html page (and parent folder, if necessary)
+	function createPage() {
+		// check to see if the directory exists
+		if (!fs.existsSync(OUTPUT_DIR)) {
+			// if it does not, then make it
+			fs.mkdirSync(OUTPUT_DIR);
+		}
+		// write the html file using the render(coworkers) data
+		fs.writeFileSync(outputPath, render(coworkers), "utf-8");
+	}
 }
 
 // initialize the getManager function
