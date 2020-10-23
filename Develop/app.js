@@ -11,6 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+// variable that stores the coworkers as they are added by the user
 const coworkers = [];
 
 // Write code to use inquirer to gather information about the development team members,
