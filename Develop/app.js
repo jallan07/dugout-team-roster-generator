@@ -255,6 +255,18 @@ function buildRoster() {
 					responses.engineerEmail,
 					responses.engineerGithub
 				);
+
+				// dialogue for the next part
+				const engineerCollected = [
+					"\r",
+					"-".repeat(60),
+					`Got it! ${engineer.name} has been added to the team!`,
+					"-".repeat(60),
+				].join("\n\n");
+
+				// print the dialogue to the screen
+				console.log(engineerCollected);
+
 				// Push the newly entered engineer to the coworkers object array
 				coworkers.push(engineer);
 				addCoworker();
@@ -344,6 +356,18 @@ function buildRoster() {
 					responses.internEmail,
 					responses.internSchool
 				);
+
+				// dialogue for the next part
+				const internCollected = [
+					"\r",
+					"-".repeat(60),
+					`Perfect. ${intern.name} has been added to the team!`,
+					"-".repeat(60),
+				].join("\n\n");
+
+				// print the dialogue to the screen
+				console.log(internCollected);
+
 				// Push the newly entered intern to the coworkers object array
 				coworkers.push(intern);
 				addCoworker();
