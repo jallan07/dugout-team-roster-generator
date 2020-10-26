@@ -25,8 +25,9 @@ function buildRoster() {
 		"With D U G O U T, you can easily create team rosters and organizational charts...",
 		"All from right here in the command line.",
 		"-".repeat(60),
+		"You may add as many managers, engineers, and interns as you'd like.",
+		"-".repeat(60),
 		"Please answer the following questions to build your team.",
-		"First, let's get information about the manager...",
 		"-".repeat(60),
 	].join("\n\n");
 	// print the intro dialogue to the screen
@@ -278,7 +279,7 @@ function buildRoster() {
 		const internDialogue = [
 			"\r",
 			"-".repeat(60),
-			`Sweet, let's add some internss!`,
+			`Sweet, let's add some interns!`,
 			"Just a few questions to get their information added...",
 			"-".repeat(60),
 		].join("\n\n");
